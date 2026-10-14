@@ -1,0 +1,23 @@
+# Machine-readable catalog. Kobayashi reads it to answer "is there already a piece for this?".
+# One entry per package. status: experimental (0.x, API may change) | stable (>=1.0) | deprecated.
+# replaces: patterns found in our repos that this package is meant to replace, so agents and
+# reviewers recognise a re-implementation when they see one.
+# detect: function names that, when two or more appear in a project that doesn't use the package,
+# mean it re-implements it (Kobayashi reports `library_candidate`). Include the Spanish variants.
+repository: https://github.com/fabianvaccaro/arpa-libs
+distribution: github   # public: git tags + GitHub releases only
+packages:
+  - name: arpa-auth
+    path: packages/arpa-auth
+    language: python
+    status: experimental
+    summary: Password hashing (Argon2id + legacy PBKDF2 verification), JWT access/refresh tokens with key rotation, opaque tokens and one-time codes.
+    keywords: [auth, password, argon2, pbkdf2, jwt, token, refresh, session, api-key, one-time-code, login]
+    replaces:
+      - "hash_password / verify_password built on argon2.PasswordHasher or hashlib.pbkdf2_hmac"
+      - "create_access_token / create_refresh_token / decode_token built on PyJWT or python-jose"
+      - "secrets.token_urlsafe session tokens stored as sha256 digests"
+      - "itsdangerous signed session cookies"
+    detect: [hash_password, verify_password, needs_rehash, create_access_token, create_refresh_token,
+             decode_token, hash_token, new_session_token, make_session_token, read_session_token,
+             cifrar_password, verificar_password, necesita_rehash, crear_token, decodificar_token]
